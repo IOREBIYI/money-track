@@ -19,7 +19,8 @@ object Csv {
 
     /** Returns parsed transactions; throws IllegalArgumentException on malformed input. */
     fun parse(text: String): List<Transaction> {
-        val rows = parseRows(text).filter { it.isNotEmpty() && !(it.size == 1 && it[0].isBlank()) }
+        // Excel and Notepad prepend a UTF-8 byte-order mark when re-saving a file.
+        val rows = parseRows(text.removePrefix("﻿")).filter { it.isNotEmpty() && !(it.size == 1 && it[0].isBlank()) }
         if (rows.isEmpty()) return emptyList()
         require(rows[0].joinToString(",").trim().lowercase() == HEADER) { "Not a MoneyTrack CSV file" }
         return rows.drop(1).mapIndexed { i, r ->
