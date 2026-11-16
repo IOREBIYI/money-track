@@ -17,6 +17,16 @@ import androidx.compose.ui.unit.dp
 import com.moneytrack.app.data.Transaction
 import java.time.YearMonth
 
+/**
+ * Share of [total] taken by [part], rounded to the nearest whole percent.
+ * A non-zero share that rounds to 0 is shown as "<1%" rather than a misleading "0%".
+ */
+internal fun percentLabel(part: Long, total: Long): String {
+    if (total <= 0L || part <= 0L) return "0%"
+    val pct = Math.round(part * 100.0 / total)
+    return if (pct == 0L) "<1%" else "$pct%"
+}
+
 @Composable
 fun ReportsScreen(all: List<Transaction>, month: YearMonth) {
     val byCategory = remember(all, month) {
@@ -45,7 +55,7 @@ fun ReportsScreen(all: List<Transaction>, month: YearMonth) {
         byCategory.forEach { (cat, cents) ->
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
                 Text(cat)
-                Text("${money(cents)} · ${(cents * 100 / total)}%")
+                Text("${money(cents)} · ${percentLabel(cents, total)}")
             }
             Box(
                 Modifier.fillMaxWidth().height(10.dp).padding(vertical = 2.dp)
