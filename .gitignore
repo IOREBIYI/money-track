@@ -13,3 +13,6 @@ app/build/
 keystore.properties
 *.jks
 *.keystore
+
+# Private drafts (not for the public repo)
+store/production-access-answers.md
