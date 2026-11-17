@@ -1,6 +1,7 @@
 package com.moneytrack.app
 
 import android.app.Application
+import android.content.Context
 import android.net.Uri
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
@@ -19,6 +20,19 @@ class MoneyViewModel(app: Application) : AndroidViewModel(app) {
 
     val budgets: StateFlow<List<Budget>> = dao.observeBudgets()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), emptyList())
+
+    private val prefs = app.getSharedPreferences("settings", Context.MODE_PRIVATE)
+
+    private val _currency = MutableStateFlow(
+        Currencies.byCode(prefs.getString("currency", null)) ?: Currencies.default()
+    )
+    val currency: StateFlow<AppCurrency> = _currency
+
+    /** Display only: existing amounts are NOT converted. */
+    fun setCurrency(c: AppCurrency) {
+        _currency.value = c
+        prefs.edit().putString("currency", c.code).apply()
+    }
 
     private val _month = MutableStateFlow(YearMonth.now())
     val month: StateFlow<YearMonth> = _month

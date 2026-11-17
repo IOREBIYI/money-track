@@ -4,9 +4,12 @@ import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.ReadOnlyComposable
+import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import java.text.NumberFormat
+import com.moneytrack.app.data.Currencies
+import com.moneytrack.app.data.formatMoney
 import java.time.LocalDate
 import java.time.YearMonth
 import java.time.format.DateTimeFormatter
@@ -33,7 +36,12 @@ fun MoneyTheme(content: @Composable () -> Unit) {
     MaterialTheme(colorScheme = scheme, content = content)
 }
 
-fun money(cents: Long): String = NumberFormat.getCurrencyInstance().format(cents / 100.0)
+/** The currency amounts are currently displayed in; provided by [AppRoot] from the saved setting. */
+val LocalCurrency = compositionLocalOf { Currencies.all.first() }
+
+@Composable
+@ReadOnlyComposable
+fun money(cents: Long): String = formatMoney(cents, LocalCurrency.current)
 
 fun YearMonth.label(): String =
     "${month.getDisplayName(TextStyle.FULL, Locale.getDefault())} $year"

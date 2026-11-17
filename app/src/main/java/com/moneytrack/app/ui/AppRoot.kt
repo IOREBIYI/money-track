@@ -36,7 +36,9 @@ fun AppRoot(vm: MoneyViewModel) {
     val transactions by vm.transactions.collectAsStateWithLifecycle()
     val budgets by vm.budgets.collectAsStateWithLifecycle()
     val month by vm.month.collectAsStateWithLifecycle()
+    val currency by vm.currency.collectAsStateWithLifecycle()
 
+    CompositionLocalProvider(LocalCurrency provides currency) {
     Scaffold(
         topBar = { TopAppBar(title = { Text(tab.label) }) },
         snackbarHost = { SnackbarHost(snackbar) },
@@ -80,6 +82,7 @@ fun AppRoot(vm: MoneyViewModel) {
             onSave = { vm.save(it); showEditor = false },
             onDelete = { editing?.let(vm::delete); showEditor = false },
         )
+    }
     }
 }
 

@@ -1,4 +1,4 @@
-﻿# MoneyTrack
+# MoneyTrack
 
 A simple, private personal finance tracker for Android. Built with Kotlin, Jetpack Compose and Room.
 
@@ -18,6 +18,7 @@ Status: closed testing. Want to help test? Open an issue or email orebiyimayowa3
 
 ## Features
 - Track income and expenses with category, date and note
+- Choose your currency from 39 options (display only, no conversion)
 - Monthly budgets per category with progress bars
 - Reports: spending by category and a 6-month income vs. expenses chart
 - CSV export and restore (backup / move to a new phone)

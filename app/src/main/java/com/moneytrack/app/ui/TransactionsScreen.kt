@@ -107,6 +107,7 @@ fun TransactionEditor(
                 OutlinedTextField(
                     value = amount, onValueChange = { amount = it },
                     label = { Text("Amount") }, singleLine = true,
+                    prefix = { Text(LocalCurrency.current.symbol) },
                     isError = amount.isNotEmpty() && (cents == null || cents <= 0),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
                 )
