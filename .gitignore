@@ -14,5 +14,8 @@ keystore.properties
 *.jks
 *.keystore
 
+# Firebase project config for your own backend (see README > Accounts setup)
+app/google-services.json
+
 # Private drafts (not for the public repo)
 store/production-access-answers.md
