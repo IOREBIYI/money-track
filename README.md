@@ -1,12 +1,23 @@
+<p align="center">
+  <img src="store/feature-graphic-1024x500.png" alt="MoneyTrack: track spending, set budgets, private and offline" width="100%">
+</p>
+
 # MoneyTrack
+
+[![Latest release](https://img.shields.io/github/v/release/IOREBIYI/money-track)](https://github.com/IOREBIYI/money-track/releases/latest)
+[![License: MIT](https://img.shields.io/github/license/IOREBIYI/money-track)](LICENSE)
+![Android 8.0+](https://img.shields.io/badge/Android-8.0%2B-3DDC84)
+![Kotlin + Jetpack Compose](https://img.shields.io/badge/Kotlin-Jetpack%20Compose-7F52FF)
 
 A simple, private personal finance tracker for Android. Built with Kotlin, Jetpack Compose and Room.
 
 ## Download
-<!-- Replace the URL below with the live listing once the app is published. -->
-Get it on Google Play: **https://play.google.com/store/apps/details?id=com.moneytrack.app**
+<!-- When the Play listing is live, replace the "in review" line with:
+     Get it on Google Play: https://play.google.com/store/apps/details?id=com.moneytrack.app -->
+- **Google Play:** in review, link coming soon.
+- **APK:** download the latest signed build from [Releases](https://github.com/IOREBIYI/money-track/releases/latest). Check the SHA-256 in the release notes. If you later install from Play, uninstall the APK first (the two are signed with different keys), and export a CSV backup before you do.
 
-Status: closed testing. Want to help test? Open an issue or email orebiyimayowa3@gmail.com.
+Want to help test? Open an issue or email orebiyimayowa3@gmail.com.
 
 <p>
   <img src="store/screenshots/01-transactions.png" width="19%" alt="Transactions">
@@ -19,6 +30,7 @@ Status: closed testing. Want to help test? Open an issue or email orebiyimayowa3
 ## Features
 - Track income and expenses with category, date and note
 - Choose your currency from 39 options (display only, no conversion)
+- A ledger-style design with its own palette and a matching dark mode
 - Monthly budgets per category with progress bars
 - Reports: spending by category and a 6-month income vs. expenses chart
 - CSV export and restore (backup / move to a new phone)
