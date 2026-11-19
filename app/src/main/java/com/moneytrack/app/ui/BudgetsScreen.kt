@@ -7,9 +7,11 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.moneytrack.app.data.Budget
 import com.moneytrack.app.data.Categories
 import com.moneytrack.app.data.Csv
@@ -30,39 +32,54 @@ fun BudgetsScreen(
     val limits = budgets.associate { it.category to it.limitCents }
     var editing by remember { mutableStateOf<String?>(null) }
 
-    LazyColumn(Modifier.fillMaxSize(), contentPadding = PaddingValues(16.dp)) {
+    LazyColumn(Modifier.fillMaxSize(), contentPadding = PaddingValues(20.dp, 8.dp, 20.dp, 24.dp)) {
         item {
             Text(
                 "Set a monthly limit per category. Tap a row to change it.",
                 style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
-            Spacer(Modifier.height(12.dp))
+            Spacer(Modifier.height(8.dp))
         }
         items(Categories.expense) { cat ->
             val s = spent[cat] ?: 0L
             val limit = limits[cat]
-            Column(Modifier.fillMaxWidth().clickable { editing = cat }.padding(vertical = 10.dp)) {
-                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                    Text(cat, style = MaterialTheme.typography.titleSmall)
+            val over = limit != null && s > limit
+            Column(Modifier.fillMaxWidth().clickable { editing = cat }.padding(vertical = 12.dp)) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    CategoryTile(cat, 36.dp)
+                    Spacer(Modifier.width(12.dp))
+                    Text(cat, style = MaterialTheme.typography.titleSmall, modifier = Modifier.weight(1f))
                     Text(
                         if (limit != null) "${money(s)} / ${money(limit)}" else "${money(s)} · no limit",
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = if (limit != null && s > limit) ExpenseRed else MaterialTheme.colorScheme.onSurface,
+                        style = MoneyStyle.copy(fontSize = 13.sp),
+                        color = if (over) ExpenseRed else MaterialTheme.colorScheme.onSurface,
                     )
                 }
                 if (limit != null) {
-                    Spacer(Modifier.height(6.dp))
-                    LinearProgressIndicator(
-                        progress = { (s.toFloat() / limit).coerceIn(0f, 1f) },
-                        modifier = Modifier.fillMaxWidth(),
-                        color = if (s > limit) ExpenseRed else MaterialTheme.colorScheme.primary,
+                    val fraction = s.toFloat() / limit
+                    Spacer(Modifier.height(10.dp))
+                    LedgerBar(
+                        fraction = fraction,
+                        color = when {
+                            over -> ExpenseRed
+                            fraction >= 0.75f -> Marigold
+                            else -> MaterialTheme.colorScheme.primary
+                        },
                     )
-                    if (s > limit) {
+                    Spacer(Modifier.height(4.dp))
+                    if (over) {
                         Text("Over budget by ${money(s - limit)}", color = ExpenseRed, style = MaterialTheme.typography.labelMedium)
+                    } else {
+                        Text(
+                            "${money(limit - s)} left",
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            style = MaterialTheme.typography.labelMedium,
+                        )
                     }
                 }
             }
-            HorizontalDivider()
+            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
         }
     }
 
@@ -76,6 +93,7 @@ fun BudgetsScreen(
                 OutlinedTextField(
                     value = text, onValueChange = { text = it },
                     label = { Text("Monthly limit (empty = none)") }, singleLine = true,
+                    prefix = { Text(LocalCurrency.current.symbol) },
                     isError = text.isNotEmpty() && cents == null,
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
                 )

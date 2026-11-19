@@ -2,6 +2,7 @@ package com.moneytrack.app.ui
 
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -37,7 +38,12 @@ fun SettingsScreen(vm: MoneyViewModel, snackbar: SnackbarHostState) {
         verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
         Text("Currency", style = MaterialTheme.typography.titleMedium)
-        OutlinedButton(onClick = { showCurrencyPicker = true }, Modifier.fillMaxWidth()) {
+        OutlinedButton(
+            onClick = { showCurrencyPicker = true },
+            Modifier.fillMaxWidth(),
+            shape = LedgerShape,
+            border = BorderStroke(1.5.dp, MaterialTheme.colorScheme.outline),
+        ) {
             Text("${currency.code} · ${currency.name} (${currency.symbol})")
         }
         Text(
@@ -52,12 +58,18 @@ fun SettingsScreen(vm: MoneyViewModel, snackbar: SnackbarHostState) {
                 "or to move to a new phone.",
             style = MaterialTheme.typography.bodyMedium,
         )
-        Button(onClick = { exporter.launch("moneytrack-backup.csv") }, Modifier.fillMaxWidth()) {
+        Button(
+            onClick = { exporter.launch("moneytrack-backup.csv") },
+            Modifier.fillMaxWidth(),
+            shape = LedgerShape,
+        ) {
             Text("Export transactions to CSV")
         }
         OutlinedButton(
             onClick = { importer.launch(arrayOf("text/*", "application/csv", "application/octet-stream")) },
             Modifier.fillMaxWidth(),
+            shape = LedgerShape,
+            border = BorderStroke(1.5.dp, MaterialTheme.colorScheme.outline),
         ) { Text("Restore from CSV") }
 
         Spacer(Modifier.height(16.dp))

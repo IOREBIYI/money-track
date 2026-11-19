@@ -1,5 +1,6 @@
 package com.moneytrack.app.ui
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -9,9 +10,10 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.moneytrack.app.data.Categories
 import com.moneytrack.app.data.Csv
 import com.moneytrack.app.data.Transaction
@@ -28,46 +30,70 @@ fun TransactionsScreen(all: List<Transaction>, month: YearMonth, onClick: (Trans
     val income = list.filter { it.isIncome }.sumOf { it.amountCents }
     val expense = list.filterNot { it.isIncome }.sumOf { it.amountCents }
 
-    LazyColumn(Modifier.fillMaxSize(), contentPadding = PaddingValues(16.dp, 8.dp, 16.dp, 96.dp)) {
+    LazyColumn(Modifier.fillMaxSize(), contentPadding = PaddingValues(20.dp, 10.dp, 20.dp, 96.dp)) {
         item {
-            Card(Modifier.fillMaxWidth()) {
-                Column(Modifier.padding(16.dp)) {
-                    Text("Balance", style = MaterialTheme.typography.labelLarge)
-                    Text(money(income - expense), style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold)
-                    Spacer(Modifier.height(8.dp))
+            LedgerCard(Modifier.fillMaxWidth(), container = ForestDeep) {
+                Column(Modifier.padding(20.dp)) {
+                    Text("BALANCE", style = MaterialTheme.typography.labelLarge.copy(letterSpacing = 2.sp), color = HeroLabel)
+                    Text(
+                        money(income - expense),
+                        style = MaterialTheme.typography.headlineMedium.copy(fontSize = 38.sp),
+                        color = PaperLight,
+                    )
+                    Spacer(Modifier.height(16.dp))
                     Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                        Text("Income  ${money(income)}", color = IncomeGreen)
-                        Text("Expenses  ${money(expense)}", color = ExpenseRed)
+                        Column {
+                            Text("IN", style = MaterialTheme.typography.labelMedium, color = HeroLabel)
+                            Text(money(income), style = MoneyStyle, color = HeroIncome)
+                        }
+                        Column(horizontalAlignment = Alignment.End) {
+                            Text("OUT", style = MaterialTheme.typography.labelMedium, color = HeroLabel)
+                            Text(money(expense), style = MoneyStyle, color = HeroExpense)
+                        }
                     }
                 }
             }
-            Spacer(Modifier.height(8.dp))
+            Spacer(Modifier.height(14.dp))
         }
         if (list.isEmpty()) {
             item {
-                Text(
-                    "No transactions this month.\nTap + to add one.",
-                    Modifier.fillMaxWidth().padding(top = 48.dp),
-                    style = MaterialTheme.typography.bodyLarge,
-                )
+                Column(Modifier.fillMaxWidth().padding(top = 40.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+                    CategoryTile("M", 56.dp)
+                    Spacer(Modifier.height(12.dp))
+                    Text("Nothing logged this month", style = MaterialTheme.typography.titleMedium)
+                    Text(
+                        "Tap + to add your first entry.",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                }
             }
         }
         items(list, key = { it.id }) { t ->
-            ListItem(
-                modifier = Modifier.clickable { onClick(t) },
-                headlineContent = { Text(t.category) },
-                supportingContent = {
-                    Text(LocalDate.ofEpochDay(t.epochDay).label() + if (t.note.isNotBlank()) " · ${t.note}" else "")
-                },
-                trailingContent = {
+            Row(
+                Modifier.fillMaxWidth().clickable { onClick(t) }.padding(vertical = 12.dp),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                CategoryTile(t.category)
+                Spacer(Modifier.width(12.dp))
+                Column(Modifier.weight(1f)) {
+                    Text(t.category, style = MaterialTheme.typography.titleSmall)
                     Text(
-                        (if (t.isIncome) "+" else "−") + money(t.amountCents),
-                        color = if (t.isIncome) IncomeGreen else ExpenseRed,
-                        fontWeight = FontWeight.SemiBold,
+                        LocalDate.ofEpochDay(t.epochDay).label() + if (t.note.isNotBlank()) " · ${t.note}" else "",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
                     )
-                },
-            )
-            HorizontalDivider()
+                }
+                Spacer(Modifier.width(8.dp))
+                Text(
+                    (if (t.isIncome) "+" else "−") + money(t.amountCents),
+                    style = MoneyStyle,
+                    color = if (t.isIncome) IncomeGreen else ExpenseRed,
+                )
+            }
+            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
         }
     }
 }
@@ -112,14 +138,20 @@ fun TransactionEditor(
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
                 )
                 Box {
-                    OutlinedButton(onClick = { menu = true }, Modifier.fillMaxWidth()) { Text("Category: $category") }
+                    OutlinedButton(
+                        onClick = { menu = true }, Modifier.fillMaxWidth(), shape = LedgerShape,
+                        border = BorderStroke(1.5.dp, MaterialTheme.colorScheme.outline),
+                    ) { Text("Category: $category") }
                     DropdownMenu(expanded = menu, onDismissRequest = { menu = false }) {
                         categories.forEach {
                             DropdownMenuItem(text = { Text(it) }, onClick = { category = it; menu = false })
                         }
                     }
                 }
-                OutlinedButton(onClick = { showDate = true }, Modifier.fillMaxWidth()) {
+                OutlinedButton(
+                    onClick = { showDate = true }, Modifier.fillMaxWidth(), shape = LedgerShape,
+                    border = BorderStroke(1.5.dp, MaterialTheme.colorScheme.outline),
+                ) {
                     Text("Date: ${LocalDate.ofEpochDay(epochDay).label()}")
                 }
                 OutlinedTextField(

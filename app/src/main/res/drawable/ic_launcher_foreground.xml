@@ -3,12 +3,16 @@
     android:height="108dp"
     android:viewportWidth="108"
     android:viewportHeight="108">
-    <!-- coin -->
+    <!-- coin shadow -->
     <path
-        android:fillColor="#FFFFFF"
+        android:fillColor="#0B2A21"
+        android:pathData="M57,58m-26,0a26,26 0,1 1,52 0a26,26 0,1 1,-52 0" />
+    <!-- marigold coin -->
+    <path
+        android:fillColor="#F2B632"
         android:pathData="M54,54m-26,0a26,26 0,1 1,52 0a26,26 0,1 1,-52 0" />
     <!-- stylised "M" -->
     <path
-        android:fillColor="#0F766E"
+        android:fillColor="#173F32"
         android:pathData="M42,66L42,42L47,42L54,54L61,42L66,42L66,66L61,66L61,50L54,62L47,50L47,66Z" />
 </vector>
