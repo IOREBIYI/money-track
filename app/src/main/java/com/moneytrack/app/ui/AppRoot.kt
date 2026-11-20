@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.moneytrack.app.MoneyViewModel
+import com.moneytrack.app.auth.AuthViewModel
 import com.moneytrack.app.data.Transaction
 
 private enum class Tab(val label: String, val icon: ImageVector) {
@@ -37,7 +38,7 @@ private enum class Tab(val label: String, val icon: ImageVector) {
 }
 
 @Composable
-fun AppRoot(vm: MoneyViewModel) {
+fun AppRoot(vm: MoneyViewModel, auth: AuthViewModel) {
     var tab by rememberSaveable { mutableStateOf(Tab.Transactions) }
     var editing by remember { mutableStateOf<Transaction?>(null) }
     var showEditor by rememberSaveable { mutableStateOf(false) }
@@ -108,7 +109,7 @@ fun AppRoot(vm: MoneyViewModel) {
                     Tab.Transactions -> TransactionsScreen(transactions, month) { editing = it; showEditor = true }
                     Tab.Budgets -> BudgetsScreen(transactions, budgets, month, onSet = vm::setBudget)
                     Tab.Reports -> ReportsScreen(transactions, month)
-                    Tab.Settings -> SettingsScreen(vm, snackbar)
+                    Tab.Settings -> SettingsScreen(vm, auth, snackbar)
                 }
             }
         }
