@@ -49,7 +49,7 @@ Want to help test? Open an issue or email orebiyimayowa3@gmail.com.
 | Release | R8 minification and resource shrinking, signed upload key, Play App Signing |
 | Testing | JUnit 4 unit tests (CSV, currencies, auth validation and error mapping, percent labels) |
 | Platform | Android 8.0+ (minSdk 26), compile and target SDK 36 |
-| Package / version | `com.moneytrack.app`, version 1.2.0 (versionCode 5) |
+| Package / version | `com.moneytrack.app`, version 1.3.0 (versionCode 6) |
 
 ## Project structure
 ```
