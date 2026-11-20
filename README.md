@@ -37,6 +37,40 @@ Want to help test? Open an issue or email orebiyimayowa3@gmail.com.
 - Sign up, sign in and "forgot password" by email (Firebase Authentication), with in-app account deletion
 - Your transactions and budgets stay on your device and are never uploaded. No ads, no analytics. See [PRIVACY.md](PRIVACY.md)
 
+## Tech stack
+| Area | Technology |
+|---|---|
+| Language | Kotlin (JVM target 17) |
+| UI | Jetpack Compose, Material 3 (Compose BOM 2025.10.00), Material icons |
+| Architecture | MVVM: `ViewModel` + Kotlin coroutines / Flow, lifecycle-aware state collection |
+| Local storage | Room 2.7.2 (SQLite), code generation with KSP |
+| Authentication | Firebase Authentication, email and password (Firebase BOM 33.7.0) |
+| Build | Gradle (Kotlin DSL), Android Gradle Plugin 8.11, Google Services plugin |
+| Release | R8 minification and resource shrinking, signed upload key, Play App Signing |
+| Testing | JUnit 4 unit tests (CSV, currencies, auth validation and error mapping, percent labels) |
+| Platform | Android 8.0+ (minSdk 26), compile and target SDK 36 |
+| Package / version | `com.moneytrack.app`, version 1.2.0 (versionCode 5) |
+
+## Project structure
+```
+app/src/main/java/com/moneytrack/app/
+  MainActivity.kt, MoneyApp.kt   App entry point and application class
+  MoneyViewModel.kt              Transactions, budgets, reports and settings state
+  auth/                          AuthRepository (Firebase), AuthViewModel, models and validation
+  data/                          Room database and DAO, CSV import/export, currency list
+  ui/                            Compose screens (AppRoot, Auth, Transactions, Budgets,
+                                 Reports, Settings) and the Theme
+app/src/test/                    Unit tests
+store/                           Play icon, feature graphic, screenshots, listing answers
+PRIVACY.md, ACCOUNT_DELETION.md  Policy pages required by Google Play
+```
+
+## Privacy and data
+- Transactions and budgets live only in the on-device Room database and are never uploaded.
+- Only your email address and user ID go to Firebase Authentication, for account management. Nothing is shared, and accounts can be deleted in the app.
+- No ads, no analytics, no third-party trackers.
+- Backups are plain CSV files you export and restore yourself.
+
 ## Build
 Requires Android Studio (or JDK 17+ and the Android SDK 36).
 
