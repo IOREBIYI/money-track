@@ -1,0 +1,94 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 640" font-family="Segoe UI, Helvetica, Arial, sans-serif" role="img" aria-labelledby="t d">
+  <title id="t">MoneyTrack architecture</title>
+  <desc id="d">Layers of the MoneyTrack Android app: UI, ViewModels, data and auth, with the on-device store and the only external service, Firebase Auth.</desc>
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#3a3a3a"/>
+    </marker>
+    <style>
+      .box{fill:#fffdf6;stroke:#1f1f1f;stroke-width:1.5}
+      .h{font-size:13px;font-weight:700;fill:#1f1f1f}
+      .s{font-size:11.5px;fill:#444}
+      .lane{font-size:12px;font-weight:700;letter-spacing:.08em;fill:#7a5c00}
+      .ln{stroke:#3a3a3a;stroke-width:1.5;fill:none}
+    </style>
+  </defs>
+  <rect width="960" height="640" fill="#f6f1e4"/>
+
+  <!-- Device boundary -->
+  <rect x="20" y="20" width="700" height="600" rx="10" fill="none" stroke="#1f1f1f" stroke-width="1.5" stroke-dasharray="6 4"/>
+  <text x="36" y="42" class="lane">ANDROID DEVICE (minSdk 26)</text>
+
+  <!-- Entry -->
+  <rect x="40" y="58" width="660" height="64" class="box"/>
+  <text x="56" y="82" class="h">Entry point</text>
+  <text x="56" y="102" class="s">MoneyApp (initialises Firebase)  ·  MainActivity (Compose host, MoneyTheme) → AuthGate</text>
+
+  <!-- UI -->
+  <rect x="40" y="146" width="660" height="150" class="box"/>
+  <text x="56" y="170" class="h">UI layer — Jetpack Compose + Material 3 (ui/)</text>
+  <rect x="56" y="182" width="150" height="42" fill="#fff" stroke="#1f1f1f"/><text x="66" y="207" class="s">AuthGate · AuthScreens</text>
+  <rect x="216" y="182" width="150" height="42" fill="#fff" stroke="#1f1f1f"/><text x="226" y="207" class="s">AppRoot (4 tabs + FAB)</text>
+  <rect x="376" y="182" width="150" height="42" fill="#fff" stroke="#1f1f1f"/><text x="386" y="207" class="s">Transactions · Editor</text>
+  <rect x="536" y="182" width="150" height="42" fill="#fff" stroke="#1f1f1f"/><text x="546" y="207" class="s">Budgets · Reports</text>
+  <rect x="56" y="236" width="150" height="42" fill="#fff" stroke="#1f1f1f"/><text x="66" y="261" class="s">SettingsScreen</text>
+  <rect x="216" y="236" width="470" height="42" fill="#fff" stroke="#1f1f1f"/><text x="226" y="261" class="s">Theme.kt — ledger palette, light + dark (values-night)</text>
+
+  <!-- ViewModels -->
+  <rect x="40" y="326" width="660" height="92" class="box"/>
+  <text x="56" y="350" class="h">State layer — ViewModel + coroutines / Flow</text>
+  <rect x="56" y="362" width="300" height="44" fill="#fff" stroke="#1f1f1f"/><text x="66" y="381" class="s">MoneyViewModel</text><text x="66" y="397" class="s">transactions, budgets, month, currency, CSV</text>
+  <rect x="376" y="362" width="310" height="44" fill="#fff" stroke="#1f1f1f"/><text x="386" y="381" class="s">AuthViewModel</text><text x="386" y="397" class="s">AuthUiState, sign in/up, reset, delete</text>
+
+  <!-- Data / Auth -->
+  <rect x="40" y="448" width="320" height="156" class="box"/>
+  <text x="56" y="472" class="h">Data layer (data/)</text>
+  <text x="56" y="494" class="s">MoneyDao (Room, KSP-generated)</text>
+  <text x="56" y="512" class="s">Entities: Transaction, Budget</text>
+  <text x="56" y="530" class="s">Csv.kt — export / restore</text>
+  <text x="56" y="548" class="s">Currencies.kt — 39 display currencies</text>
+  <text x="56" y="566" class="s">SharedPreferences "settings" (currency)</text>
+  <text x="56" y="588" class="s" font-style="italic">Plain Kotlin, unit-tested</text>
+
+  <rect x="380" y="448" width="320" height="156" class="box"/>
+  <text x="396" y="472" class="h">Auth layer (auth/)</text>
+  <text x="396" y="494" class="s">AuthRepository (interface)</text>
+  <text x="396" y="512" class="s">FirebaseAuthRepository · UnconfiguredAuthRepository</text>
+  <text x="396" y="530" class="s">AuthValidation (email, 8+ chars, letter + digit)</text>
+  <text x="396" y="548" class="s">mapAuthException → AuthError → message()</text>
+  <text x="396" y="570" class="s" font-style="italic">Repository chosen by AuthBackend</text>
+  <text x="396" y="588" class="s" font-style="italic">(unconfigured when no google-services.json)</text>
+
+  <!-- Right column -->
+  <rect x="750" y="448" width="190" height="156" class="box"/>
+  <text x="766" y="472" class="h">Local storage</text>
+  <text x="766" y="496" class="s">SQLite via Room</text>
+  <text x="766" y="514" class="s">transactions · budgets</text>
+  <text x="766" y="540" class="s" font-weight="700" fill="#1a6b2f">Never leaves the device</text>
+  <text x="766" y="560" class="s">CSV files go only where</text>
+  <text x="766" y="576" class="s">the user saves them</text>
+
+  <rect x="750" y="146" width="190" height="156" fill="#fff3d6" stroke="#1f1f1f" stroke-width="1.5"/>
+  <text x="766" y="170" class="h">Firebase Auth</text>
+  <text x="766" y="190" class="s">Only external service</text>
+  <text x="766" y="214" class="s">Sends: email + password</text>
+  <text x="766" y="232" class="s">Holds: email + user ID</text>
+  <text x="766" y="256" class="s">Debug builds can use the</text>
+  <text x="766" y="272" class="s">local Auth emulator</text>
+  <text x="766" y="288" class="s">(10.0.2.2:9099)</text>
+
+  <rect x="750" y="58" width="190" height="64" fill="#fff" stroke="#1f1f1f" stroke-width="1.5" stroke-dasharray="4 3"/>
+  <text x="766" y="84" class="h">User</text>
+  <text x="766" y="104" class="s">Touch input, file picker</text>
+
+  <!-- Arrows -->
+  <path class="ln" marker-end="url(#a)" d="M370,122 L370,146"/>
+  <path class="ln" marker-end="url(#a)" d="M370,296 L370,326"/>
+  <path class="ln" marker-end="url(#a)" d="M206,418 L206,448"/>
+  <path class="ln" marker-end="url(#a)" d="M540,418 L540,448"/>
+  <path class="ln" marker-end="url(#a)" d="M200,604 L200,614 L845,614 L845,604"/>
+  <path class="ln" marker-end="url(#a)" marker-start="url(#a)" d="M700,560 L730,560 L730,240 L750,240" stroke-dasharray="5 3"/>
+  <path class="ln" marker-end="url(#a)" d="M750,90 L700,90"/>
+
+  <text x="40" y="634" class="s" fill="#444">Solid arrows: calls / data flow · Dashed: network (HTTPS) · Dashed box: the device</text>
+</svg>
