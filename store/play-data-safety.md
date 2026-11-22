@@ -16,11 +16,11 @@ Use these when you ship the version with sign in / sign up. The app now has the 
 | Data shared with third parties | **None.** Firebase (Google) acts as a service provider processing data on your behalf, which Play does not count as sharing. |
 | **Is all of the user data collected by your app encrypted in transit?** | **Yes** (HTTPS/TLS). |
 | **Do you provide a way for users to request that their data be deleted?** | **Yes.** |
-| **Data deletion URL** | `https://github.com/IOREBIYI/money-track/blob/main/ACCOUNT_DELETION.md` |
+| **Data deletion URL** | `https://moneytrack-wheat-nine.vercel.app/account-deletion` |
 | Data that users can choose to delete | Email address and user ID, via Settings > Delete my account. |
 
 ## Other declarations that change
-- **Privacy policy URL:** `https://github.com/IOREBIYI/money-track/blob/main/PRIVACY.md` (updated for accounts).
+- **Privacy policy URL:** `https://moneytrack-wheat-nine.vercel.app/privacy` (updated for accounts).
 - **App access:** because the app now needs an account, Play reviewers must be able to get in. Under **App access**, choose "All or some functionality is restricted" and give a **test account** (an email and password you create in your Firebase project for review). Keep it working.
 - **Ads:** still "No".
 - **Target audience:** keep **18 and over**.
