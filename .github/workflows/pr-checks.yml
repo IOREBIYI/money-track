@@ -63,6 +63,11 @@ jobs:
 
       - uses: gradle/actions/setup-gradle@v4
 
+      # firebase-tools provides the local Auth emulator the sign-in tests talk to.
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
       # The emulator needs KVM for acceptable speed on Linux runners.
       - name: Enable KVM
         run: |
@@ -78,7 +83,10 @@ jobs:
           target: google_apis
           profile: pixel_5
           disable-animations: true
-          script: ./gradlew connectedDebugAndroidTest --stacktrace
+          # emulators:exec starts the Firebase Auth emulator on the runner (reachable from the
+          # Android emulator as 10.0.2.2:9099), runs the command, then shuts it down. The
+          # "demo-" project id guarantees nothing can touch a real Firebase project.
+          script: npx --yes firebase-tools@14 emulators:exec --only auth --project demo-moneytrack "./gradlew connectedDebugAndroidTest --stacktrace"
 
       - name: Upload instrumented test reports
         if: always()
