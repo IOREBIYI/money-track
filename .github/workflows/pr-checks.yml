@@ -2,7 +2,6 @@ name: PR checks
 
 on:
   pull_request:
-    branches: [main]
   workflow_dispatch:
 
 # A new push to the same PR cancels the older, now-stale run.
