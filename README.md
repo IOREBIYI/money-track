@@ -139,8 +139,8 @@ Store assets live in [`store/`](store): the 512×512 icon, the 1024×500 feature
 | Category | Finance |
 | Content rating | Everyone |
 | Data safety | Email address and user ID collected for account management; not shared; encrypted in transit; deletion supported. See [store/play-data-safety.md](store/play-data-safety.md) |
-| Privacy policy | [PRIVACY.md](PRIVACY.md) |
-| Account deletion URL | [ACCOUNT_DELETION.md](ACCOUNT_DELETION.md) |
+| Privacy policy | https://moneytrack-wheat-nine.vercel.app/privacy (source: [PRIVACY.md](PRIVACY.md)) |
+| Account deletion URL | https://moneytrack-wheat-nine.vercel.app/account-deletion (source: [ACCOUNT_DELETION.md](ACCOUNT_DELETION.md)) |
 | Min / target SDK | 26 (Android 8.0) / 36 |
 
 > The upload keystore (`keystore/upload.jks`) and its passwords are **not** in this repo. Keep a private backup: with Play App Signing a lost upload key can only be reset through Play support.
