@@ -15,8 +15,12 @@ data class AuthUiState(
     val resetSentTo: String? = null,
 )
 
-class AuthViewModel(app: Application) : AndroidViewModel(app) {
-    private val repo: AuthRepository = AuthBackend.create(app)
+class AuthViewModel internal constructor(
+    app: Application,
+    private val repo: AuthRepository,
+) : AndroidViewModel(app) {
+    /** What the app uses (via `by viewModels()`): the real backend for this build. */
+    constructor(app: Application) : this(app, AuthBackend.create(app))
 
     val user: StateFlow<AuthUser?> = repo.user
 
